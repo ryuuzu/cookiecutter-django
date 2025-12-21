@@ -8,7 +8,7 @@ COPY ./package.json ${APP_HOME}
 RUN npm install && npm cache clean --force
 COPY . ${APP_HOME}
 {%- if cookiecutter.frontend_pipeline == 'Webpack' and cookiecutter.use_whitenoise == 'n' %}
-{%- if cookiecutter.cloud_provider == 'AWS' %}
+{%- if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
 ARG DJANGO_AWS_STORAGE_BUCKET_NAME
 ENV DJANGO_AWS_STORAGE_BUCKET_NAME=${DJANGO_AWS_STORAGE_BUCKET_NAME}
 ARG DJANGO_AWS_S3_CUSTOM_DOMAIN

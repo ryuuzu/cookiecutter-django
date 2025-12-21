@@ -79,7 +79,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
     default=True,
 )
 
-{% if cookiecutter.cloud_provider == 'AWS' %}
+{% if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
@@ -145,6 +145,13 @@ STORAGES = {
         },
     },
     {%- endif %}
+{%- elif cookiecutter.cloud_provider == 'MinIO' %}
+    "default": {
+        "BACKEND": "config.storages.MediaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "config.storages.StaticStorage",
+    },
 {%- elif cookiecutter.cloud_provider == 'GCP' %}
     "default": {
         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
@@ -190,7 +197,7 @@ STORAGES = {
 }
 {%- endif %}
 
-{%- if cookiecutter.cloud_provider == 'AWS' %}
+{%- if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
 MEDIA_URL = f"https://{aws_s3_domain}/media/"
 {%- if cookiecutter.use_whitenoise == 'n' %}
 COLLECTFASTA_STRATEGY = "collectfasta.strategies.boto3.Boto3Strategy"
@@ -348,6 +355,20 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
         },
+        "json_formatter": {
+            "()": structlog.stdlib.ProcessorFormatter,
+            "processor": structlog.processors.JSONRenderer(),
+            # This "foreign_pre_chain" is the magic glue.
+            # It grabs standard python logs (like django.db) and formats them
+            # so they have the same request_id/user_id context as your app logs.
+            "foreign_pre_chain": [
+                structlog.contextvars.merge_contextvars,
+                structlog.processors.TimeStamper(fmt="iso"),
+                structlog.stdlib.add_logger_name,
+                structlog.stdlib.add_log_level,
+            ],
+        },
+
     },
     "handlers": {
         "mail_admins": {
@@ -358,7 +379,7 @@ LOGGING = {
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
+            "formatter": "json_formatter",
         },
     },
     "root": {"level": "INFO", "handlers": ["console"]},
@@ -373,6 +394,11 @@ LOGGING = {
             "handlers": ["console", "mail_admins"],
             "propagate": True,
         },
+        "django_structlog": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+
     },
 }
 {% else %}

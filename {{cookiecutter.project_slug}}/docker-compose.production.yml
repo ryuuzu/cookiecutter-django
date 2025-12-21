@@ -18,7 +18,7 @@ services:
       {%- if cookiecutter.frontend_pipeline == 'Webpack' and cookiecutter.use_whitenoise == 'n' %}
       args:
         # These variable can be defined in an .env file in the root of the repo
-        {%- if cookiecutter.cloud_provider == 'AWS' %}
+        {%- if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
         DJANGO_AWS_STORAGE_BUCKET_NAME: ${DJANGO_AWS_STORAGE_BUCKET_NAME}
         DJANGO_AWS_S3_CUSTOM_DOMAIN: ${DJANGO_AWS_S3_CUSTOM_DOMAIN}
         {%- elif cookiecutter.cloud_provider == 'GCP' %}

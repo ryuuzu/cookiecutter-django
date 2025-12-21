@@ -19,7 +19,7 @@
   "editor": ["None", "PyCharm", "VS Code"],
   "use_docker": "n",
   "postgresql_version": ["18", "17", "16", "15", "14"],
-  "cloud_provider": ["AWS", "GCP", "Azure", "None"],
+  "cloud_provider": ["AWS", "GCP", "Azure", "MinIO", "None"],
   "mail_service": [
     "Mailgun",
     "Amazon SES",

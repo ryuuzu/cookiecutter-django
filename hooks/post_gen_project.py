@@ -412,6 +412,9 @@ def remove_drf_starter_files():
     shutil.rmtree(Path("{{cookiecutter.project_slug}}", "users", "api"))
     shutil.rmtree(Path("{{cookiecutter.project_slug}}", "users", "tests", "api"))
 
+def remove_minio_setup_files():
+    Path("config", "storages.py").unlink()
+
 
 def main():  # noqa: C901, PLR0912, PLR0915
     debug = "{{ cookiecutter.debug }}".lower() == "y"
@@ -483,6 +486,9 @@ def main():  # noqa: C901, PLR0912, PLR0915
             WARNING + "You chose to not use any cloud providers nor Docker, "
             "media files won't be served in production." + TERMINATOR,
         )
+
+    if "{{ cookiecutter.cloud_provider }}" != "MinIO":
+        remove_minio_setup_files()
 
     if "{{ cookiecutter.use_celery }}".lower() == "n":
         remove_celery_files()

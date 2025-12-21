@@ -33,7 +33,7 @@ BREVO_API_KEY=
 {% elif cookiecutter.mail_service == 'SparkPost' %}
 SPARKPOST_API_KEY=
 {% endif %}
-{% if cookiecutter.cloud_provider == 'AWS' %}
+{% if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
 # AWS
 # ------------------------------------------------------------------------------
 DJANGO_AWS_ACCESS_KEY_ID=
