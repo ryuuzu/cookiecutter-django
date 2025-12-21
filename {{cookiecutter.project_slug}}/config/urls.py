@@ -8,8 +8,7 @@ from django.urls import include
 from django.urls import path
 from django.views.generic import TemplateView
 {%- if cookiecutter.use_drf == 'y' %}
-from drf_spectacular.views import SpectacularAPIView
-from drf_spectacular.views import SpectacularSwaggerView
+from drf_spectacular.views import SpectacularSwaggerView, SpectacularRedocView, SpectacularAPIView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,

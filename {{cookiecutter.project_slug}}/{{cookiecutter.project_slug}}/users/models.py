@@ -4,6 +4,7 @@ from typing import ClassVar
 {% endif -%}
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField
+from django.db import models
 {%- if cookiecutter.username_type == "email" %}
 from django.db.models import EmailField
 {%- endif %}
