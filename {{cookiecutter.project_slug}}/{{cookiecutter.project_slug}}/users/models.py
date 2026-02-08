@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models import EmailField
 {%- endif %}
 from django.contrib.auth.hashers import check_password
+from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone

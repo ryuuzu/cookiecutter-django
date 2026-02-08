@@ -1,3 +1,4 @@
+.PHONY: add manage wipe-out
 
 lint:
 	docker compose -f docker-compose.local.yml run --rm django ruff check --fix
@@ -15,12 +16,6 @@ bash:
 	docker compose -f docker-compose.local.yml run --rm django bash
 
 shell:
-	docker compose -f docker-compose.local.yml run --rm django bash -c "python manage.py shell -c 'from core_apps.academics.models import ReportCard, Student; from core_apps.users.models import User, Staff; from django.contrib.auth.models import Group, Permission; import code; code.interact(local=locals())'"
-
-shell2:
-	docker compose -f docker-compose.local.yml run --rm django python manage.py shell
-
-localshell:
 	docker compose -f docker-compose.local.yml run --rm django python manage.py shell
 
 migrations:
@@ -47,7 +42,29 @@ docker-up:
 	docker compose -f docker-compose.local.yml up django
 
 manage:
-	docker compose -f docker-compose.local.yml run --rm django python manage.py $(cmd)
+	@docker compose -f docker-compose.local.yml run --rm django \
+		python manage.py $(filter-out $@,$(MAKECMDGOALS))
+
+migrate-shared:
+	docker compose -f docker-compose.local.yml run --rm django python manage.py migrate_schemas --shared
+
+migrate-tenants:
+	docker compose -f docker-compose.local.yml run --rm django python manage.py migrate_schemas
+
+wipe-out:
+	@read -p "WARNING: This will delete ALL containers and volumes. Continue? [y/N] " ans; \
+	if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then \
+		docker compose -f docker-compose.local.yml down -v --remove-orphans; \
+	else \
+		echo "Aborted."; \
+	fi
 
 cs:
 	docker compose -f docker-compose.local.yml exec django python manage.py collectstatic --noinput --clear
+
+add:
+	@docker compose -f docker-compose.local.yml run --rm django uv add $(filter-out $@,$(MAKECMDGOALS))
+
+# Prevent make from treating the argument as a target
+%:
+	@:
