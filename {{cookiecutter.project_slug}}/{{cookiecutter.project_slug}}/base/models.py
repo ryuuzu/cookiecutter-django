@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 from {{ cookiecutter.project_slug }}.base.managers import BaseManager
+from {{ cookiecutter.project_slug }}.base.exceptions import BadRequest
 
 
 class BaseModel(models.Model):
@@ -141,7 +142,7 @@ class BaseModel(models.Model):
             ),
         ).exists():
             msg = f"{field_value} already exists."
-            raise ValueError(msg)
+            raise BadRequest(msg)
 
     @classmethod
     def validate_field_as_unique_including_deleted(
@@ -158,8 +159,8 @@ class BaseModel(models.Model):
 
         if cls.objects.filter(sql_logic).exists():
             msg = f"{field_value} already exists."
-            raise ValueError(msg)
+            raise BadRequest(msg)
 
         if cls.objects.all_objects().filter(sql_logic).exists():
             msg = f"{field_value} already exists in trash. Please restore and use it."
-            raise ValueError(msg)
+            raise BadRequest(msg)

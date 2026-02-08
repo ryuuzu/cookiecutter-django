@@ -118,7 +118,8 @@ RUN mkdir -p ${APP_HOME}/{{ cookiecutter.project_slug }}/media
 RUN chown django:django ${APP_HOME}
 
 # Place executables in the environment at the front of the path
-ENV PATH="/app/.venv/bin:$PATH"
+ENV APP_HOME=${APP_HOME}
+ENV PATH="$APP_HOME/.venv/bin:$PATH"
 
 USER django
 

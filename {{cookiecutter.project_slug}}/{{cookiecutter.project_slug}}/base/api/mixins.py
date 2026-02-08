@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from {{ cookiecutter.project_slug }}.base.api.permissions import (
-    AdminGroupOnlyPermission,
+    SuperUserOnlyPermission,
     ReadOnlyPermission,
 )
 from {{ cookiecutter.project_slug }}.base.api.request import BaseRequest
@@ -21,7 +21,6 @@ from {{ cookiecutter.project_slug }}.base.api.serializers import (
 )
 from {{ cookiecutter.project_slug }}.base.exceptions import BadRequest, Forbidden
 from {{ cookiecutter.project_slug }}.base.models import BaseModel
-from {{ cookiecutter.project_slug }}.users.utils import get_user_prefetch_data
 
 _ModelT = TypeVar("_ModelT", bound=BaseModel)
 
@@ -78,19 +77,22 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
 
     def perform_destroy(self, instance):
         return instance.delete(deleted_by=self.request.user)
-
-    def list(self, request, *args, **kwargs):
+    
+    
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view, or `None`.
+        """
         if self.disable_pagination:
-            queryset = self.filter_queryset(self.get_queryset())
-
-            serializer = self.get_serializer(
-                queryset,
-                many=True,
-                context=self.get_serializer_context(),
-            )
-            return Response({"count": queryset.count(), "results": serializer.data})
-        else:
-            return super().list(request, *args, **kwargs)
+            return None
+        
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        return self._paginator
 
     @extend_schema(
         request=EmptySerializer,
@@ -100,7 +102,7 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
         methods=["get"],
         url_path="deleted",
         url_name="deleted",
-        permission_classes=[AdminGroupOnlyPermission],
+        permission_classes=[SuperUserOnlyPermission],
     )
     def deleted(self, request, *args, **kwargs):
         """
@@ -125,7 +127,7 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
         methods=["post"],
         url_path="restore",
         url_name="restore",
-        permission_classes=[AdminGroupOnlyPermission],
+        permission_classes=[SuperUserOnlyPermission],
     )
     def restore(self, request, *args, **kwargs):
         if not self.allow_view_deleted:
@@ -161,7 +163,7 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
         methods=["post"],
         url_path="delete-permanently",
         url_name="delete_permanently",
-        permission_classes=[AdminGroupOnlyPermission],
+        permission_classes=[SuperUserOnlyPermission],
     )
     def delete_permanently(self, request, *args, **kwargs):
         if not self.allow_view_deleted:
@@ -197,7 +199,7 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
         methods=["post"],
         url_path="empty-trash",
         url_name="empty_trash",
-        permission_classes=[AdminGroupOnlyPermission],
+        permission_classes=[SuperUserOnlyPermission],
     )
     def empty_trash(self, request, *args, **kwargs):
         if not self.allow_view_deleted:
@@ -251,7 +253,7 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
         methods=["post"],
         url_path="restore-all",
         url_name="restore_all",
-        permission_classes=[AdminGroupOnlyPermission],
+        permission_classes=[SuperUserOnlyPermission],
     )
     def restore_all(self, request, *args, **kwargs):
         if not self.allow_view_deleted:
