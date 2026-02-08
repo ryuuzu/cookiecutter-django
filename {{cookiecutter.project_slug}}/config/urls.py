@@ -4,8 +4,8 @@ from django.contrib import admin
 {%- if cookiecutter.use_async == 'y' %}
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 {%- endif %}
-from django.urls import include
-from django.urls import path
+from django.shortcuts import redirect
+from django.urls import include, path, reverse
 from django.views.generic import TemplateView
 {%- if cookiecutter.use_drf == 'y' %}
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularRedocView, SpectacularAPIView
@@ -15,8 +15,19 @@ from rest_framework_simplejwt.views import (
 )
 {%- endif %}
 
+{%- if cookiecutter.use_drf == 'y' %}
+def home(request):
+    return redirect(reverse("api-docs"))
+{%- endif %}
+
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("", 
+{%- if cookiecutter.use_drf == 'y' %}
+        home,
+{% else %}
+        TemplateView.as_view(template_name="pages/home.html"), 
+{%- endif %}
+         name="home"),
     path(
         "about/",
         TemplateView.as_view(template_name="pages/about.html"),
