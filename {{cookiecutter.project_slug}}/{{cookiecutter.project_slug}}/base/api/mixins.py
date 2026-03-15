@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 class BaseModelViewSetMixin(Generic[_ModelT]):
     allow_view_deleted = True
-    disable_pagination = True
+    disable_pagination = False
     queryset: QuerySet
     request: BaseRequest
     model: _ModelT
@@ -60,8 +60,7 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
 
         return context
 
-    def get_queryset(self):
-        if self.request.user.is_superuser and self.allow_view_deleted:
+g        if self.request.user.is_superuser and self.allow_view_deleted:
             try:
                 queryset = self.model.objects.all_objects()
             except AttributeError:
@@ -76,9 +75,12 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
         )
 
     def perform_destroy(self, instance):
-        return instance.delete(deleted_by=self.request.user)
-    
-    
+        try:
+            return instance.delete(deleted_by=self.request.user)
+        except TypeError:
+            logger.error(f"This instance doesn't have deleted_by field. Calling without deleted_by: {e}")
+            return instance.delete()
+
     @property
     def paginator(self):
         """
