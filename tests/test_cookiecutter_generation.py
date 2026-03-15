@@ -107,10 +107,11 @@ SUPPORTED_COMBINATIONS = [
     {"cloud_provider": "Azure", "mail_service": "Other SMTP"},
     # Note: cloud_providers GCP, Azure, and None
     # with mail_service Amazon SES is not supported
+    {"rest_api": "None"},
+    {"rest_api": "DRF"},
+    {"rest_api": "Django Ninja"},
     {"use_async": "y"},
     {"use_async": "n"},
-    {"use_drf": "y"},
-    {"use_drf": "n"},
     {"frontend_pipeline": "None"},
     {"frontend_pipeline": "Django Compressor"},
     {"frontend_pipeline": "Gulp"},
@@ -409,7 +410,7 @@ def test_trim_domain_email(cookies, context):
     assert "DJANGO_ALLOWED_HOSTS=.example.com" in prod_django_env.read_text()
 
     base_settings = result.project_path / "config" / "settings" / "base.py"
-    assert '"me@example.com"' in base_settings.read_text()
+    assert "<me@example.com>" in base_settings.read_text()
 
 
 def test_pyproject_toml(cookies, context):

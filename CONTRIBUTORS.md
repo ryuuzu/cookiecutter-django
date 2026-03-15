@@ -377,6 +377,13 @@ Listed in alphabetical order.
     <td></td>
   </tr>
   <tr>
+    <td>asmo</td>
+    <td>
+      <a href="https://github.com/a5m0">a5m0</a>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
     <td>Barclay Gauld</td>
     <td>
       <a href="https://github.com/yunti">yunti</a>
@@ -2186,6 +2193,13 @@ Listed in alphabetical order.
     <td>Simon Rey</td>
     <td>
       <a href="https://github.com/eqqe">eqqe</a>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Soldatov Serhii</td>
+    <td>
+      <a href="https://github.com/soldatov-ss">soldatov-ss</a>
     </td>
     <td></td>
   </tr>

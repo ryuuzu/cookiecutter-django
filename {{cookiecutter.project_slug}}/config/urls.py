@@ -7,25 +7,25 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.shortcuts import redirect
 from django.urls import include, path, reverse
 from django.views.generic import TemplateView
-{%- if cookiecutter.use_drf == 'y' %}
+{%- if cookiecutter.rest_api == 'DRF' %}
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularRedocView, SpectacularAPIView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-{%- endif %}
-
-{%- if cookiecutter.use_drf == 'y' %}
 def home(request):
     return redirect(reverse("api-docs"))
+{%- elif cookiecutter.rest_api == 'Django Ninja' %}
+
+from .api import api
 {%- endif %}
 
 urlpatterns = [
-    path("", 
+    path("",
 {%- if cookiecutter.use_drf == 'y' %}
         home,
 {% else %}
-        TemplateView.as_view(template_name="pages/home.html"), 
+        TemplateView.as_view(template_name="pages/home.html"),
 {%- endif %}
          name="home"),
     path(
@@ -48,7 +48,7 @@ if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
     urlpatterns += staticfiles_urlpatterns()
 {%- endif %}
-{% if cookiecutter.use_drf == 'y' %}
+{% if cookiecutter.rest_api == 'DRF' %}
 # API URLS
 urlpatterns += [
     # API base url
@@ -67,6 +67,13 @@ urlpatterns += [
         SpectacularRedocView.as_view(url_name="api-schema"),
         name="api-redoc",
     ),
+]
+{%- elif cookiecutter.rest_api == 'Django Ninja' %}
+
+# API URLS
+urlpatterns += [
+    # API base url
+    path("api/", api.urls),
 ]
 {%- endif %}
 

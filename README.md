@@ -19,7 +19,7 @@ production-ready Django projects quickly.
 
 ## Features
 
-- For Django 5.2
+- For Django 6.0
 - Works with Python 3.13
 - Renders Django projects with 100% starting test coverage
 - Twitter [Bootstrap](https://github.com/twbs/bootstrap) v5
@@ -151,8 +151,12 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     8 - SparkPost
     9 - Other SMTP
     Choose from 1, 2, 3, 4, 5, 6, 7, 8, 9 [1]: 1
+    Select rest_api [None]:
+    1 - None
+    2 - DRF
+    3 - Django Ninja
+    Choose from 1, 2, 3 [1]: 1
     use_async [n]: n
-    use_drf [n]: y
     Select frontend_pipeline:
     1 - None
     2 - Django Compressor
