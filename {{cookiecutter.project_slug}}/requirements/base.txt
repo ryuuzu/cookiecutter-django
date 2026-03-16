@@ -31,7 +31,7 @@ uvicorn-worker==0.4.0  # https://github.com/Kludex/uvicorn-worker
 # ------------------------------------------------------------------------------
 django-structlog==10.0.0
 django-auditlog==3.0.0
-django-filter==24.3 # https://github.com/carltongibson/django-filter{%- if cookiecutter.frontend_pipeline == 'Django Compressor' %}
+django-filter==24.3 # https://github.com/carltongibson/django-filter
 django==6.0.3  # pyup: < 6.1 # https://www.djangoproject.com/
 django-environ==0.13.0  # https://github.com/joke2k/django-environ
 django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
