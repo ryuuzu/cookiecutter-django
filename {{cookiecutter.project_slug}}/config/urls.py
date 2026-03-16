@@ -22,7 +22,7 @@ from .api import api
 
 urlpatterns = [
     path("",
-{%- if cookiecutter.use_drf == 'y' %}
+{%- if cookiecutter.rest_api == 'DRF' %}
         home,
 {% else %}
         TemplateView.as_view(template_name="pages/home.html"),
