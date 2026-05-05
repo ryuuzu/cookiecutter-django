@@ -64,8 +64,11 @@ Add these env variables:
     DJANGO_SECRET_KEY='<secret key goes here>'
     DJANGO_ALLOWED_HOSTS='<www.your-domain.com>'
     DJANGO_ADMIN_URL='<not admin/>'
-    MAILGUN_API_KEY='<mailgun key>'
-    MAILGUN_DOMAIN='<mailgun sender domain (e.g. mg.yourdomain.com)>'
+    EMAIL_HOST='<smtp.example.com>'
+    EMAIL_PORT='587'
+    EMAIL_USE_TLS='True'
+    EMAIL_HOST_USER='<your-email@example.com>'
+    EMAIL_HOST_PASSWORD='<your-email-password>'
     DJANGO_AWS_ACCESS_KEY_ID=
     DJANGO_AWS_SECRET_ACCESS_KEY=
     DJANGO_AWS_STORAGE_BUCKET_NAME=

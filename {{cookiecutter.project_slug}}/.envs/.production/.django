@@ -14,25 +14,11 @@ DJANGO_SECURE_SSL_REDIRECT=False
 # Email
 # ------------------------------------------------------------------------------
 DJANGO_SERVER_EMAIL=
-{% if cookiecutter.mail_service == 'Mailgun' %}
-MAILGUN_API_KEY=
-MAILGUN_DOMAIN=
-{% elif cookiecutter.mail_service == 'Mailjet' %}
-MAILJET_API_KEY=
-MAILJET_SECRET_KEY=
-{% elif cookiecutter.mail_service == 'Mandrill' %}
-MANDRILL_API_KEY=
-{% elif cookiecutter.mail_service == 'Postmark' %}
-POSTMARK_SERVER_TOKEN=
-{% elif cookiecutter.mail_service == 'Sendgrid' %}
-SENDGRID_API_KEY=
-SENDGRID_GENERATE_MESSAGE_ID=True
-SENDGRID_MERGE_FIELD_FORMAT=None
-{% elif cookiecutter.mail_service == 'Brevo' %}
-BREVO_API_KEY=
-{% elif cookiecutter.mail_service == 'SparkPost' %}
-SPARKPOST_API_KEY=
-{% endif %}
+EMAIL_HOST=
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
 {% if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
 # AWS
 # ------------------------------------------------------------------------------
@@ -75,3 +61,5 @@ REDIS_URL=redis://redis:6379/0
 CELERY_FLOWER_USER=!!!SET CELERY_FLOWER_USER!!!
 CELERY_FLOWER_PASSWORD=!!!SET CELERY_FLOWER_PASSWORD!!!
 {% endif %}
+
+

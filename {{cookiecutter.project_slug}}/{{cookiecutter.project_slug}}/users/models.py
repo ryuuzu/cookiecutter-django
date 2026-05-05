@@ -81,7 +81,6 @@ class User(AbstractUser):
         null=True,
         blank=True,
     )
-    color = models.CharField(max_length=7, default=get_random_color_code)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField()
     deleted_at = models.DateTimeField(null=True, blank=True)

@@ -20,17 +20,6 @@
   "use_docker": "n",
   "postgresql_version": ["18", "17", "16", "15", "14"],
   "cloud_provider": ["AWS", "GCP", "Azure", "MinIO", "None"],
-  "mail_service": [
-    "Mailgun",
-    "Amazon SES",
-    "Mailjet",
-    "Mandrill",
-    "Postmark",
-    "Sendgrid",
-    "Brevo",
-    "SparkPost",
-    "Other SMTP"
-  ],
   "rest_api": ["None", "DRF", "Django Ninja"],
   "use_async": "n",
   "frontend_pipeline": ["None", "Django Compressor", "Gulp", "Webpack"],

@@ -82,19 +82,6 @@ cloud_provider:
 
     If you choose no cloud provider and docker, the production stack will serve the media files via an nginx Docker service. Without Docker, the media files won't work.
 
-mail_service:
-    Select an email service that Django-Anymail provides
-
-    1. Mailgun_
-    2. `Amazon SES`_
-    3. Mailjet_
-    4. Mandrill_
-    5. Postmark_
-    6. SendGrid_
-    7. `Brevo (formerly SendinBlue)`_
-    8. SparkPost_
-    9. `Other SMTP`_
-
 rest_api:
     Select a REST API framework to use. The choices are:
 
@@ -169,16 +156,6 @@ debug:
 .. _AWS: https://aws.amazon.com/s3/
 .. _GCP: https://cloud.google.com/storage/
 .. _Azure: https://azure.microsoft.com/en-us/products/storage/blobs/
-
-.. _Amazon SES: https://aws.amazon.com/ses/
-.. _Mailgun: https://www.mailgun.com
-.. _Mailjet: https://www.mailjet.com
-.. _Mandrill: http://mandrill.com
-.. _Postmark: https://postmarkapp.com
-.. _SendGrid: https://sendgrid.com
-.. _Brevo (formerly SendinBlue): https://www.brevo.com
-.. _SparkPost: https://www.sparkpost.com
-.. _Other SMTP: https://anymail.readthedocs.io/en/stable/
 
 .. _Django Rest Framework: https://github.com/encode/django-rest-framework/
 .. _Django Ninja: https://github.com/vitalik/django-ninja

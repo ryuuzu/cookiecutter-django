@@ -22,8 +22,9 @@ Run these commands to deploy the project to Heroku:
 
     heroku addons:create heroku-redis:mini
 
-    # Assuming you chose Mailgun as mail service (see below for others)
-    heroku addons:create mailgun:starter
+    # Setup email service (e.g., Sendgrid, Mailgun, or your own SMTP)
+    # For Sendgrid: heroku addons:create sendgrid:starter
+    # For Mailgun: heroku addons:create mailgun:starter
 
     heroku config:set DJANGO_DEBUG=False
     heroku config:set DJANGO_SETTINGS_MODULE=config.settings.production
@@ -58,11 +59,13 @@ Notes
 Email Service
 +++++++++++++
 
-The script above assumes that you've chose Mailgun as email service. If you want to use another one, check the `documentation for django-anymail <https://anymail.readthedocs.io>`_ to know which environment variables to set. Heroku provides other `add-ons for emails <https://elements.heroku.com/addons#email-sms>`_ (e.g. Sendgrid) which can be configured with a similar one line command.
+You can configure your email service using Django's standard SMTP settings (``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``, ``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS``). Heroku provides several `add-ons for emails <https://elements.heroku.com/addons#email-sms>`_ such as Sendgrid or Mailgun, which can be configured with a similar one line command as shown in the setup above.
 
 .. warning::
 
-    .. include:: ../includes/mailgun.rst
+    If your email server is not configured properly, attempting to send an email will cause an Internal Server Error. By default, ``django-allauth`` is setup to `have emails verifications mandatory`_, which means it'll send a verification email when an unverified user tries to log-in or when someone tries to sign-up. Ensure your email service is properly configured before testing email functionality.
+
+    .. _have emails verifications mandatory: https://docs.allauth.org/en/latest/account/configuration.html#email-verification
 
 Heroku & Docker
 +++++++++++++++
