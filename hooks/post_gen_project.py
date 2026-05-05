@@ -450,8 +450,7 @@ def main():  # noqa: C901, PLR0912, PLR0915
 
     if "{{ cookiecutter.use_docker }}".lower() == "y":
         remove_utility_files()
-        if "{{ cookiecutter.cloud_provider }}".lower() != "none":
-            remove_nginx_docker_files()
+        remove_nginx_docker_files()
     else:
         remove_docker_files()
 
@@ -490,12 +489,6 @@ def main():  # noqa: C901, PLR0912, PLR0915
             "{{ cookiecutter.frontend_pipeline }}",
             use_docker=("{{ cookiecutter.use_docker }}".lower() == "y"),
             use_async=("{{ cookiecutter.use_async }}".lower() == "y"),
-        )
-
-    if "{{ cookiecutter.cloud_provider }}" == "None" and "{{ cookiecutter.use_docker }}".lower() == "n":
-        print(
-            WARNING + "You chose to not use any cloud providers nor Docker, "
-            "media files won't be served in production." + TERMINATOR,
         )
 
     if "{{ cookiecutter.cloud_provider }}" != "MinIO":

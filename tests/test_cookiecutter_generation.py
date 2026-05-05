@@ -67,13 +67,7 @@ SUPPORTED_COMBINATIONS = [
     {"postgresql_version": "16"},
     {"postgresql_version": "15"},
     {"postgresql_version": "14"},
-    {"cloud_provider": "AWS", "use_whitenoise": "y"},
-    {"cloud_provider": "AWS", "use_whitenoise": "n"},
-    {"cloud_provider": "GCP", "use_whitenoise": "y"},
-    {"cloud_provider": "GCP", "use_whitenoise": "n"},
-    {"cloud_provider": "Azure", "use_whitenoise": "y"},
-    {"cloud_provider": "Azure", "use_whitenoise": "n"},
-    # Note: cloud_provider=None AND use_whitenoise=n is not supported
+    {"cloud_provider": "MinIO"},
     {"rest_api": "None"},
     {"rest_api": "DRF"},
     {"rest_api": "Django Ninja"},
@@ -89,8 +83,6 @@ SUPPORTED_COMBINATIONS = [
     {"use_mailpit": "n"},
     {"use_sentry": "y"},
     {"use_sentry": "n"},
-    {"use_whitenoise": "y"},
-    {"use_whitenoise": "n"},
     {"use_heroku": "y"},
     {"use_heroku": "n"},
     {"ci_tool": "None"},
@@ -105,10 +97,9 @@ SUPPORTED_COMBINATIONS = [
 ]
 
 UNSUPPORTED_COMBINATIONS = [
-    {"cloud_provider": "None", "use_whitenoise": "n"},
     {"cloud_provider": "GCP", "mail_service": "Amazon SES"},
     {"cloud_provider": "Azure", "mail_service": "Amazon SES"},
-    {"cloud_provider": "None", "mail_service": "Amazon SES"},
+    {"cloud_provider": "MinIO", "mail_service": "Amazon SES"},
 ]
 
 

@@ -113,109 +113,20 @@ AZURE_ACCOUNT_NAME = env("DJANGO_AZURE_ACCOUNT_NAME")
 AZURE_CONTAINER = env("DJANGO_AZURE_CONTAINER_NAME")
 {% endif -%}
 
-{% if cookiecutter.cloud_provider != 'None' or cookiecutter.use_whitenoise == 'y' -%}
 # STATIC & MEDIA
 # ------------------------
 STORAGES = {
-{%- if cookiecutter.use_whitenoise == 'y' and cookiecutter.cloud_provider == 'None' %}
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-{%- elif cookiecutter.cloud_provider == 'AWS' %}
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-            "location": "media",
-            "file_overwrite": False,
-        },
-    },
-    {%- if cookiecutter.use_whitenoise == 'y' %}
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-    {%- else %}
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-            "location": "static",
-            "default_acl": "public-read",
-        },
-    },
-    {%- endif %}
-{%- elif cookiecutter.cloud_provider == 'MinIO' %}
     "default": {
         "BACKEND": "config.storages.MediaStorage",
     },
     "staticfiles": {
         "BACKEND": "config.storages.StaticStorage",
     },
-{%- elif cookiecutter.cloud_provider == 'GCP' %}
-    "default": {
-        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-        "OPTIONS": {
-            "location": "media",
-            "file_overwrite": False,
-        },
-    },
-    {%- if cookiecutter.use_whitenoise == 'y' %}
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-    {%- else %}
-    "staticfiles": {
-        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-        "OPTIONS": {
-            "location": "static",
-            "default_acl": "publicRead",
-        },
-    },
-    {%- endif %}
-{%- elif cookiecutter.cloud_provider == 'Azure' %}
-    "default": {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
-        "OPTIONS": {
-            "location": "media",
-            "overwrite_files": False,
-        },
-    },
-    {%- if cookiecutter.use_whitenoise == 'y' %}
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-    {%- else %}
-    "staticfiles": {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
-        "OPTIONS": {
-            "location": "static",
-        },
-    },
-    {%- endif %}
-{%- endif %}
 }
-{%- endif %}
 
-{%- if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
 MEDIA_URL = f"https://{aws_s3_domain}/media/"
-{%- if cookiecutter.use_whitenoise == 'n' %}
 COLLECTFASTA_STRATEGY = "collectfasta.strategies.boto3.Boto3Strategy"
 STATIC_URL = f"https://{aws_s3_domain}/static/"
-{%- endif %}
-{%- elif cookiecutter.cloud_provider == 'GCP' %}
-MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-{%- if cookiecutter.use_whitenoise == 'n' %}
-COLLECTFASTA_STRATEGY = "collectfasta.strategies.gcloud.GoogleCloudStrategy"
-STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
-{%- endif %}
-{%- elif cookiecutter.cloud_provider == 'Azure' %}
-MEDIA_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/media/"
-{%- if cookiecutter.use_whitenoise == 'n' %}
-COLLECTFASTA_STRATEGY = "collectfasta.strategies.azure.AzureBlobStrategy"
-STATIC_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/static/"
-{%- endif %}
-{%- endif %}
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -253,20 +164,10 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 # ------------------------------------------------------------------------------
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_ENABLED
 COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
-{%- if cookiecutter.cloud_provider == 'None' %}
-# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_STORAGE
-COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
-{%- elif cookiecutter.cloud_provider in ('AWS', 'GCP', 'Azure') and cookiecutter.use_whitenoise == 'n' %}
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_STORAGE
 COMPRESS_STORAGE = STORAGES["staticfiles"]["BACKEND"]
-{%- endif %}
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
-COMPRESS_URL = STATIC_URL{% if cookiecutter.use_whitenoise == 'y' or cookiecutter.cloud_provider == 'None' %}  # noqa: F405
-{%- endif -%}
-{%- if cookiecutter.use_whitenoise == 'y' %}
-# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
-COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
-{%- endif %}
+COMPRESS_URL = STATIC_URL
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
 COMPRESS_FILTERS = {
     "css": [
@@ -276,12 +177,10 @@ COMPRESS_FILTERS = {
     "js": ["compressor.filters.jsmin.JSMinFilter"],
 }
 {% endif %}
-{%- if cookiecutter.use_whitenoise == 'n' and cookiecutter.cloud_provider in ('AWS', 'GCP', 'Azure') -%}
 # Collectfasta
 # ------------------------------------------------------------------------------
 # https://github.com/jasongi/collectfasta#installation
 INSTALLED_APPS = ["collectfasta", *INSTALLED_APPS]
-{% endif %}
 # LOGGING
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging

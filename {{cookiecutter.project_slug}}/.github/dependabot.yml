@@ -45,9 +45,6 @@ updates:
       - 'compose/production/aws/'
       - 'compose/production/postgres/'
       - 'compose/production/traefik/'
-{%- if cookiecutter.cloud_provider == 'None' %}
-      - 'compose/production/nginx/'
-{%- endif %}
     # Every weekday
     schedule:
       interval: 'daily'

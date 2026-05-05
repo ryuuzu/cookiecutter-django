@@ -164,9 +164,6 @@ MIDDLEWARE = [
 {%- if cookiecutter.rest_api != 'None' %}
     "corsheaders.middleware.CorsMiddleware",
 {%- endif %}
-{%- if cookiecutter.use_whitenoise == 'y' %}
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-{%- endif %}
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",

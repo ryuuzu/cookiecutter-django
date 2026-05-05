@@ -7,7 +7,7 @@ WORKDIR ${APP_HOME}
 COPY ./package.json ${APP_HOME}
 RUN npm install && npm cache clean --force
 COPY . ${APP_HOME}
-{%- if cookiecutter.frontend_pipeline == 'Webpack' and cookiecutter.use_whitenoise == 'n' %}
+{%- if cookiecutter.frontend_pipeline == 'Webpack' %}
 {%- if cookiecutter.cloud_provider == 'AWS' or cookiecutter.cloud_provider == 'MinIO' %}
 ARG DJANGO_AWS_STORAGE_BUCKET_NAME
 ENV DJANGO_AWS_STORAGE_BUCKET_NAME=${DJANGO_AWS_STORAGE_BUCKET_NAME}
@@ -108,11 +108,6 @@ RUN chmod +x /start-flower
 
 # Copy the application from the builder
 COPY --from=python-build-stage --chown=django:django ${APP_HOME} ${APP_HOME}
-
-{%- if cookiecutter.cloud_provider == 'None' %}
-# explicitly create the media folder before changing ownership below
-RUN mkdir -p ${APP_HOME}/{{ cookiecutter.project_slug }}/media
-{%- endif %}
 
 # make django owner of the WORKDIR directory as well.
 RUN chown django:django ${APP_HOME}

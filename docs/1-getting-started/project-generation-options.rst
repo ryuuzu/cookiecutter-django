@@ -73,14 +73,7 @@ postgresql_version:
     5. 14
 
 cloud_provider:
-    Select a cloud provider for static & media files. The choices are:
-
-    1. AWS_
-    2. GCP_
-    3. Azure_
-    4. None
-
-    If you choose no cloud provider and docker, the production stack will serve the media files via an nginx Docker service. Without Docker, the media files won't work.
+    Cloud provider for static & media files storage. This template uses MinIO by default for S3-compatible storage.
 
 rest_api:
     Select a REST API framework to use. The choices are:
@@ -110,9 +103,6 @@ use_mailpit:
 
 use_sentry:
     Indicates whether the project should be configured to use Sentry_.
-
-use_whitenoise:
-    Indicates whether the project should be configured to use WhiteNoise_.
 
 use_heroku:
     Indicates whether the project should be configured so as to be deployable
