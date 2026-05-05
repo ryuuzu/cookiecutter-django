@@ -1,6 +1,6 @@
 [project]
 name = "cookiecutter-django"
-version = "2026.03.13"
+version = "2026.05.02"
 description = "A Cookiecutter template for creating production-ready Django projects quickly."
 readme = "README.md"
 keywords = [
@@ -14,7 +14,7 @@ license = { text = "BSD" }
 authors = [
   { name = "Daniel Roy Greenfeld", email = "pydanny@gmail.com" },
 ]
-requires-python = "==3.13.*"
+requires-python = "==3.14.*"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Console",
@@ -24,7 +24,7 @@ classifiers = [
   "Natural Language :: English",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Software Development",
 ]
@@ -33,19 +33,19 @@ dependencies = [
   "cookiecutter==2.7.1",
   "django-upgrade==1.30.0",
   "djlint==1.36.4",
-  "gitpython==3.1.46",
+  "gitpython==3.1.49",
   "jinja2==3.1.6",
-  "pre-commit==4.5.1",
-  "pygithub==2.8.1",
-  "pytest==9.0.2",
+  "pre-commit==4.6.0",
+  "pygithub==2.9.1",
+  "pytest==9.0.3",
   "pytest-cookies==0.7",
   "pytest-instafail==0.5",
   "pytest-xdist==3.8.0",
   "pyyaml==6.0.3",
-  "requests==2.32.5",
-  "ruff==0.15.6",
+  "requests==2.33.1",
+  "ruff==0.15.12",
   "sh==2.2.2; sys_platform!='win23'",
-  "tox==4.49.1",
+  "tox==4.53.0",
   "tox-uv>=1.17",
 ]
 urls = { Repository = "https://github.com/cookiecutter/cookiecutter-django" }

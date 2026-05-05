@@ -888,6 +888,13 @@ Listed in alphabetical order.
     <td></td>
   </tr>
   <tr>
+    <td>Eric Hanchrow</td>
+    <td>
+      <a href="https://github.com/offby1">offby1</a>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
     <td>Ernesto Cedeno</td>
     <td>
       <a href="https://github.com/codnee">codnee</a>
@@ -1976,6 +1983,13 @@ Listed in alphabetical order.
     <td>Pawan Chaurasia</td>
     <td>
       <a href="https://github.com/rjsnh1522">rjsnh1522</a>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Peck</td>
+    <td>
+      <a href="https://github.com/johnnypeck">johnnypeck</a>
     </td>
     <td></td>
   </tr>
