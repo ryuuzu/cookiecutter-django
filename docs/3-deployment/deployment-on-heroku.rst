@@ -63,9 +63,7 @@ You can configure your email service using Django's standard SMTP settings (``EM
 
 .. warning::
 
-    If your email server is not configured properly, attempting to send an email will cause an Internal Server Error. By default, ``django-allauth`` is setup to `have emails verifications mandatory`_, which means it'll send a verification email when an unverified user tries to log-in or when someone tries to sign-up. Ensure your email service is properly configured before testing email functionality.
-
-    .. _have emails verifications mandatory: https://docs.allauth.org/en/latest/account/configuration.html#email-verification
+    If your email server is not configured properly, attempting to send an email will cause an Internal Server Error. Ensure your email service is properly configured before testing email functionality.
 
 Heroku & Docker
 +++++++++++++++

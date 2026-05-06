@@ -47,16 +47,10 @@ To obtain logs and information about crashes in a production setup, make sure th
 The `extra` parameter allows you to send additional information about the context of this error.
 
 
-You will probably also need to setup the Mail backend by configuring the SMTP settings (``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``, and ``EMAIL_HOST_PASSWORD``), otherwise, the account creation view will crash and result in a 500 error when the backend attempts to send an email to the account owner.
+You will probably also need to set up the mail backend by configuring the SMTP settings (``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``, and ``EMAIL_HOST_PASSWORD``) if your project sends email.
 
 .. _sentry.io: https://sentry.io/welcome
 
-
-.. warning::
-
-    If your email server is not configured properly, attempting to send an email will cause an Internal Server Error. By default, ``django-allauth`` is setup to `have emails verifications mandatory`_, which means it'll send a verification email when an unverified user tries to log-in or when someone tries to sign-up.
-
-    .. _have emails verifications mandatory: https://docs.allauth.org/en/latest/account/configuration.html#email-verification
 
 
 Optional: Use AWS IAM Role for EC2 instance

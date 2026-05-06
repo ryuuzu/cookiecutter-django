@@ -26,7 +26,7 @@ production-ready Django projects quickly.
 - [12-Factor](https://12factor.net) based settings via [django-environ](https://github.com/joke2k/django-environ)
 - Secure by default. We believe in SSL.
 - Optimized development and production settings
-- Registration via [django-allauth](https://github.com/pennersr/django-allauth)
+- Standard Django authentication with a custom user model
 - Comes with custom user model ready to go
 - Optional basic ASGI setup for Websockets
 - Optional custom static build using Gulp or Webpack

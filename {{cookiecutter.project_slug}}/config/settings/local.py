@@ -1,7 +1,6 @@
 from .base import *  # noqa: F403
 from .base import INSTALLED_APPS
 from .base import MIDDLEWARE
-# Frontend pipeline removed — webpack loader is not used
 from .base import env
 
 # GENERAL
@@ -40,7 +39,6 @@ if env("USE_DOCKER") == "yes":
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [".".join([*ip.split(".")[:-1], "1"]) for ip in ips]
-    # Node container/frontend pipeline removed — no node host to add to INTERNAL_IPS
     {%- if cookiecutter.windows == 'y' %}
     # RunServerPlus
     # ------------------------------------------------------------------------------
@@ -68,6 +66,5 @@ CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 
 {%- endif %}
-# Frontend pipeline removed — webpack loader not used in local settings
 # Your stuff...
 # ------------------------------------------------------------------------------

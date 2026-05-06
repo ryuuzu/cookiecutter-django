@@ -37,7 +37,6 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("{{ cookiecutter.project_slug }}.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

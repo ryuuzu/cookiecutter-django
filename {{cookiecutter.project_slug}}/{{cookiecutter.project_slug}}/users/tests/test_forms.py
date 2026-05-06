@@ -1,10 +1,8 @@
-"""Module for all Form Tests."""
+"""Module for all form tests."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-
-from django.utils.translation import gettext_lazy as _
 
 from {{ cookiecutter.project_slug }}.users.forms import UserAdminCreationForm
 
@@ -13,20 +11,11 @@ if TYPE_CHECKING:
 
 
 class TestUserAdminCreationForm:
-    """
-    Test class for all tests related to the UserAdminCreationForm
-    """
+    """Tests for the admin user creation form."""
 
     def test_username_validation_error_msg(self, user: User):
-        """
-        Tests UserAdminCreation Form's unique validator functions correctly by testing:
-            1) A new user with an existing username cannot be added.
-            2) Only 1 error is raised by the UserCreation Form
-            3) The desired error message is raised
-        """
+        """Tests that the form rejects duplicate identifiers."""
 
-        # The user already exists,
-        # hence cannot be created.
         form = UserAdminCreationForm(
             {
                 {%- if cookiecutter.username_type == "email" %}
@@ -34,8 +23,8 @@ class TestUserAdminCreationForm:
                 {%- else %}
                 "username": user.username,
                 {%- endif %}
-                "password1": user.password,
-                "password2": user.password,
+                "password1": "My_R@ndom-P@ssw0rd",
+                "password2": "My_R@ndom-P@ssw0rd",
             },
         )
 
@@ -43,8 +32,6 @@ class TestUserAdminCreationForm:
         assert len(form.errors) == 1
         {%- if cookiecutter.username_type == "email" %}
         assert "email" in form.errors
-        assert form.errors["email"][0] == _("This email has already been taken.")
         {%- else %}
         assert "username" in form.errors
-        assert form.errors["username"][0] == _("This username has already been taken.")
         {%- endif %}

@@ -61,12 +61,3 @@ EMAIL_HOST_USER                         EMAIL_HOST_USER             n/a         
 EMAIL_HOST_PASSWORD                     EMAIL_HOST_PASSWORD         n/a                                            raises error
 ======================================= =========================== ============================================== ======================================================================
 
---------------------------
-Other Environment Settings
---------------------------
-
-DJANGO_ACCOUNT_ALLOW_REGISTRATION (=True)
-    Allow enable or disable user registration through `django-allauth` without disabling other characteristics like authentication and account management. (Django Setting: ACCOUNT_ALLOW_REGISTRATION)
-
-DJANGO_ADMIN_FORCE_ALLAUTH (=False)
-    Force the `admin` sign in process to go through the `django-allauth` workflow.

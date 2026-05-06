@@ -35,6 +35,5 @@ TEMPLATES[0]["OPTIONS"]["debug"] = True  # type: ignore[index]
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "http://media.testserver/"
 
-# Frontend pipeline removed — webpack loader not used in tests
 # Your stuff...
 # ------------------------------------------------------------------------------

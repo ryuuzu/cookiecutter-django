@@ -29,8 +29,8 @@ class PasswordHistory(models.Model):
 class User(AbstractUser):
     """
     Default custom user model for {{cookiecutter.project_name}}.
-    If adding fields that need to be filled at user signup,
-    check forms.SignupForm and forms.SocialSignupForms accordingly.
+    If adding fields that need to be filled in the admin creation form,
+    check forms.UserAdminCreationForm accordingly.
     """
 
     class GenderChoices(models.TextChoices):
