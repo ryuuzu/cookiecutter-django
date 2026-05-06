@@ -1,6 +1,4 @@
 volumes:
-  {{ cookiecutter.project_slug }}_local_postgres_data: {}
-  {{ cookiecutter.project_slug }}_local_postgres_data_backups: {}
   {% if cookiecutter.use_celery == 'y' %}{{ cookiecutter.project_slug }}_local_redis_data: {}{% endif %}
 
 services:
@@ -11,48 +9,21 @@ services:
     image: {{ cookiecutter.project_slug }}_local_django
     container_name: {{ cookiecutter.project_slug }}_local_django
     depends_on:
-      - postgres
       {%- if cookiecutter.use_celery == 'y' %}
       - redis
-      {%- endif %}
-      {%- if cookiecutter.use_mailpit == 'y' %}
-      - mailpit
       {%- endif %}
     volumes:
       - /app/.venv
       - .:/app:z
     env_file:
       - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
     ports:
       - '8000:8000'
     command: /start
 
-  postgres:
-    build:
-      context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: {{ cookiecutter.project_slug }}_production_postgres
-    container_name: {{ cookiecutter.project_slug }}_local_postgres
-    volumes:
-      {%- if cookiecutter.postgresql_version|int >= 18 %}
-      - {{ cookiecutter.project_slug }}_local_postgres_data:/var/lib/postgresql/{{ cookiecutter.postgresql_version }}/docker
-      {%- else %}
-      - {{ cookiecutter.project_slug }}_local_postgres_data:/var/lib/postgresql/data
-      {%- endif %}
-      - {{ cookiecutter.project_slug }}_local_postgres_data_backups:/backups
-    env_file:
-      - ./.envs/.local/.postgres
-
-  {%- if cookiecutter.use_mailpit == 'y' %}
-
-  mailpit:
-    image: docker.io/axllent/mailpit:latest
-    container_name: {{ cookiecutter.project_slug }}_local_mailpit
-    ports:
-      - "8025:8025"
-
-  {%- endif %}
+  # Postgres is run locally by default; the containerized postgres service
+  # has been removed. Keep ./.envs/.local/.postgres in your environment if
+  # you still maintain DB credentials there.
   {%- if cookiecutter.use_celery == 'y' %}
 
   redis:
@@ -67,10 +38,6 @@ services:
     container_name: {{ cookiecutter.project_slug }}_local_celeryworker
     depends_on:
       - redis
-      - postgres
-      {%- if cookiecutter.use_mailpit == 'y' %}
-      - mailpit
-      {%- endif %}
     ports: []
     command: /start-celeryworker
 
@@ -80,10 +47,6 @@ services:
     container_name: {{ cookiecutter.project_slug }}_local_celerybeat
     depends_on:
       - redis
-      - postgres
-      {%- if cookiecutter.use_mailpit == 'y' %}
-      - mailpit
-      {%- endif %}
     ports: []
     command: /start-celerybeat
 

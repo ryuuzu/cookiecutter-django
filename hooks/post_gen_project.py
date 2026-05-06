@@ -475,7 +475,7 @@ def main():  # noqa: C901, PLR0912, PLR0915
         if "{{ cookiecutter.keep_local_envs_in_vcs }}".lower() == "y":
             append_to_gitignore_file("!.envs/.local/")
 
-    if "{{ cookiecutter.frontend_pipeline }}" in ["None", "Django Compressor"]:
+    if "{{ cookiecutter.frontend_pipeline }}" in ["None"]:
         remove_gulp_files()
         remove_webpack_files()
         remove_sass_files()

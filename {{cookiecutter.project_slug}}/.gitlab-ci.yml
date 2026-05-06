@@ -42,7 +42,7 @@ pytest:
   {%- else %}
   image: ghcr.io/astral-sh/uv:python3.14
   services:
-    - postgres:{{ cookiecutter.postgresql_version }}
+    - postgres:14
   variables:
     DATABASE_URL: pgsql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB
   before_script:

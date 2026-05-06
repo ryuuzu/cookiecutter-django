@@ -45,7 +45,6 @@ _These features can be enabled during initial project setup._
 
 - Serve static files from Amazon S3, Google Cloud Storage, Azure Storage or [Whitenoise](https://whitenoise.readthedocs.io/)
 - Configuration for [Celery](https://docs.celeryq.dev) and [Flower](https://github.com/mher/flower) (the latter in Docker setup only)
-- Integration with [Mailpit](https://github.com/axllent/mailpit/) for local email testing
 - Integration with [Sentry](https://sentry.io/welcome/) for error logging
 
 ## Constraints
@@ -128,13 +127,6 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     3 - VS Code
     Choose from 1, 2, 3 [1]: 1
     use_docker [n]: n
-    Select postgresql_version:
-    1 - 18
-    2 - 17
-    3 - 16
-    4 - 15
-    5 - 14
-    Choose from 1, 2, 3, 4 [1]: 1
     Select mail_service:
     1 - Mailgun
     2 - Amazon SES
@@ -154,12 +146,10 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     use_async [n]: n
     Select frontend_pipeline:
     1 - None
-    2 - Django Compressor
-    3 - Gulp
-    4 - Webpack
-    Choose from 1, 2, 3, 4 [1]: 1
+    2 - Gulp
+    3 - Webpack
+    Choose from 1, 2, 3 [1]: 1
     use_celery [n]: y
-    use_mailpit [n]: n
     use_sentry [n]: y
     use_heroku [n]: y
     Select ci_tool:

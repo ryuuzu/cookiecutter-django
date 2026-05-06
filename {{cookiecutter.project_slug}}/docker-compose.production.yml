@@ -1,6 +1,4 @@
 volumes:
-  production_postgres_data: {}
-  production_postgres_data_backups: {}
   production_traefik: {}
   {% if cookiecutter.use_celery == 'y' %}
   production_redis_data: {}
@@ -27,27 +25,12 @@ services:
 
     image: {{ cookiecutter.project_slug }}_production_django
     depends_on:
-      - postgres
       - redis
     env_file:
       - ./.envs/.production/.django
-      - ./.envs/.production/.postgres
     command: /start
-
-  postgres:
-    build:
-      context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: {{ cookiecutter.project_slug }}_production_postgres
-    volumes:
-      {%- if cookiecutter.postgresql_version|int >= 18 %}
-      - production_postgres_data:/var/lib/postgresql/{{ cookiecutter.postgresql_version }}/docker
-      {%- else %}
-      - production_postgres_data:/var/lib/postgresql/data
-      {%- endif %}
-      - production_postgres_data_backups:/backups
-    env_file:
-      - ./.envs/.production/.postgres
+  # Postgres is expected to be provided by your external DB server in production.
+  # The local containerized Postgres service has been removed from this template.
 
   traefik:
     build:
@@ -98,6 +81,5 @@ services:
       dockerfile: ./compose/production/aws/Dockerfile
     env_file:
       - ./.envs/.production/.django
-    volumes:
-      - production_postgres_data_backups:/backups:z
+    # backups volume removed; adjust your backup strategy to use external storage
   {%- endif %}

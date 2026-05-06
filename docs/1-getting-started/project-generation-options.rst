@@ -63,15 +63,6 @@ editor:
 use_docker:
     Indicates whether the project should be configured to use Docker_, `Docker Compose`_ and `devcontainer`_.
 
-postgresql_version:
-    Select a PostgreSQL_ version to use. The choices are:
-
-    1. 18
-    2. 17
-    3. 16
-    4. 15
-    5. 14
-
 cloud_provider:
     Cloud provider for static & media files storage. This template uses MinIO by default for S3-compatible storage.
 
@@ -89,17 +80,13 @@ frontend_pipeline:
     Select a pipeline to compile and optimise frontend assets (JS, CSS, ...):
 
     1. None
-    2. `Django Compressor`_
-    3. `Gulp`_
-    4. `Webpack`_
+    2. `Gulp`_
+    3. `Webpack`_
 
 Both Gulp and Webpack support Bootstrap recompilation with real-time variables alteration.
 
 use_celery:
     Indicates whether the project should be configured to use Celery_.
-
-use_mailpit:
-    Indicates whether the project should be configured to use Mailpit_.
 
 use_sentry:
     Indicates whether the project should be configured to use Sentry_.
@@ -150,11 +137,7 @@ debug:
 .. _Django Rest Framework: https://github.com/encode/django-rest-framework/
 .. _Django Ninja: https://github.com/vitalik/django-ninja
 
-.. _Django Compressor: https://github.com/django-compressor/django-compressor
-
 .. _Celery: https://github.com/celery/celery
-
-.. _Mailpit: https://github.com/axllent/mailpit
 
 .. _Sentry: https://github.com/getsentry/sentry
 

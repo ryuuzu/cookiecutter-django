@@ -1,8 +1,7 @@
 {% raw %}
 {% load static i18n {% endraw %}
 
-{%- if cookiecutter.frontend_pipeline == 'Django Compressor' %}compress{%- endif %}{% raw %}%}{% endraw %}
-  {%- if cookiecutter.frontend_pipeline == 'Webpack' %}{% raw %}
+{%- if cookiecutter.frontend_pipeline == 'Webpack' %}{% raw %}
     {% load render_bundle from webpack_loader %}
 
   {% endraw %}
@@ -25,7 +24,7 @@
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
   {% block css %}
   {%- endraw %}
-  {%- if cookiecutter.frontend_pipeline in ['None', 'Django Compressor'] %}
+  {%- if cookiecutter.frontend_pipeline == 'None' %}
     {%- raw %}
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link rel="stylesheet"
@@ -42,12 +41,6 @@
 {% if cookiecutter.frontend_pipeline == 'None' %}
   {% raw %}
   <link href="{% static 'css/project.css' %}" rel="stylesheet" />
-{%- endraw %}
-{% elif cookiecutter.frontend_pipeline == 'Django Compressor' %}
-{% raw %}
-{% compress css %}
-  <link href="{% static 'css/project.css' %}" rel="stylesheet" />
-{% endcompress %}
 {%- endraw %}
 {% elif cookiecutter.frontend_pipeline == 'Gulp' %}
 {% raw %}
@@ -92,12 +85,6 @@
 {% if cookiecutter.frontend_pipeline == 'None' %}
   {% raw %}
   <script defer src="{% static 'js/project.js' %}"></script>
-{%- endraw %}
-{% elif cookiecutter.frontend_pipeline == 'Django Compressor' %}
-{% raw %}
-{% compress js %}
-  <script defer src="{% static 'js/project.js' %}"></script>
-{% endcompress %}
 {%- endraw %}
 {% elif cookiecutter.frontend_pipeline == 'Gulp' %}
 {% raw %}

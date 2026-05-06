@@ -112,10 +112,12 @@ To solve this, you can either:
 
 None of these options are ideal, we're open to suggestions on how to improve this. If you think you have one, please open an issue or a pull request.
 
-(Optional) Postgres Data Volume Modifications
----------------------------------------------
+Production database
+-------------------
 
-Postgres is saving its database files to the ``production_postgres_data`` volume by default. Change that if you want something else and make sure to make backups since this is not done automatically.
+This template assumes your production PostgreSQL database is provided by an external DB server (managed service or self-hosted) rather than a local container. Ensure your production environment provides a reachable database and that the `DATABASE_URL` (and any credentials) are configured through your environment variables or secret management system (for example in ``.envs/.production/.django`` or via your hosting provider).
+
+Backups and restore procedures must be configured outside of this compose file — use your cloud provider's backup service or a dedicated backup process for your external database.
 
 
 Building & Running Production Stack
@@ -154,7 +156,7 @@ If you want to scale your application, run::
    docker compose -f docker-compose.production.yml up --scale django=4
    docker compose -f docker-compose.production.yml up --scale celeryworker=2
 
-.. warning:: don't try to scale ``postgres``, ``celerybeat``, or ``traefik``.
+.. warning:: don't try to scale ``celerybeat`` or ``traefik``.
 
 To see how your containers are doing run::
 
