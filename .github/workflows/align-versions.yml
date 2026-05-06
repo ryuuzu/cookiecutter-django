@@ -4,7 +4,6 @@ on:
   pull_request:
     paths:
       - "{{cookiecutter.project_slug}}/requirements/local.txt"
-      - "{{cookiecutter.project_slug}}/compose/local/node/Dockerfile"
   # Manual trigger
   workflow_dispatch:
 
@@ -16,30 +15,17 @@ jobs:
   run:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' && (github.event.pull_request.user.login == 'pyup-bot' || github.event.pull_request.user.login == 'dependabot[bot]') }}
     runs-on: ubuntu-latest
-    env:
-      GH_PAT: ${{ secrets.GH_PAT }}
-
     strategy:
       fail-fast: false
       matrix:
         job:
           - script: scripts/ruff_version.py
             name: Ruff
-          - script: scripts/node_version.py
-            name: Node
 
     name: "${{ matrix.job.name }} versions"
     steps:
-      - name: Checkout with token
-        uses: actions/checkout@v6
-        if: ${{ env.GH_PAT != '' }}
-        with:
-          token: ${{ env.GH_PAT }}
-          ref: ${{ github.head_ref }}
-
       - name: Checkout without token
         uses: actions/checkout@v6
-        if: ${{ env.GH_PAT == '' }}
         with:
           ref: ${{ github.head_ref }}
 

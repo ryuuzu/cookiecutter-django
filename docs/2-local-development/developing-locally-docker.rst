@@ -239,17 +239,6 @@ By default, it's enabled both in local and production environments (``docker-com
 
 .. _`Flower`: https://github.com/mher/flower
 
-Using Webpack or Gulp
-~~~~~~~~~~~~~~~~~~~~~
-
-If you've opted for Gulp or Webpack as front-end pipeline, the project comes configured with `Sass`_ compilation and `live reloading`_. As you change your Sass/JS source files, the task runner will automatically rebuild the corresponding CSS and JS assets and reload them in your browser without refreshing the page.
-
-The stack comes with a dedicated node service to build the static assets, watch for changes and proxy requests to the Django app with live reloading scripts injected in the response. For everything to work smoothly, you need to access the application at the port served by the node service, which is http://localhost:3000 by default.
-
-.. _Sass: https://sass-lang.com/
-.. _live reloading: https://browsersync.io
-
-
 Using Just for Docker Commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

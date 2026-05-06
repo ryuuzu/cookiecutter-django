@@ -144,11 +144,6 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     3 - Django Ninja
     Choose from 1, 2, 3 [1]: 1
     use_async [n]: n
-    Select frontend_pipeline:
-    1 - None
-    2 - Gulp
-    3 - Webpack
-    Choose from 1, 2, 3 [1]: 1
     use_celery [n]: y
     use_sentry [n]: y
     use_heroku [n]: y

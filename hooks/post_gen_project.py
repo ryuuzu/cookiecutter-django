@@ -94,20 +94,15 @@ def remove_sass_files():
 
 
 def remove_gulp_files():
-    file_names = ["gulpfile.mjs"]
-    for file_name in file_names:
-        Path(file_name).unlink()
+    return None
 
 
 def remove_webpack_files():
-    shutil.rmtree("webpack")
-    remove_vendors_js()
+    return None
 
 
 def remove_vendors_js():
-    vendors_js_path = Path("{{ cookiecutter.project_slug }}", "static", "js", "vendors.js")
-    if vendors_js_path.exists():
-        vendors_js_path.unlink()
+    return None
 
 
 def remove_project_css():
@@ -117,84 +112,15 @@ def remove_project_css():
 
 
 def remove_packagejson_file():
-    file_names = ["package.json"]
-    for file_name in file_names:
-        Path(file_name).unlink()
+    return None
 
 
 def update_package_json(remove_dev_deps=None, remove_keys=None, scripts=None):
-    remove_dev_deps = remove_dev_deps or []
-    remove_keys = remove_keys or []
-    scripts = scripts or {}
-    package_json = Path("package.json")
-    content = json.loads(package_json.read_text())
-    for package_name in remove_dev_deps:
-        content["devDependencies"].pop(package_name)
-    for key in remove_keys:
-        content.pop(key)
-    content["scripts"].update(scripts)
-    updated_content = json.dumps(content, ensure_ascii=False, indent=2) + "\n"
-    package_json.write_text(updated_content)
+    return None
 
 
 def handle_js_runner(choice, use_docker, use_async):
-    if choice == "Gulp":
-        update_package_json(
-            remove_dev_deps=[
-                "@babel/core",
-                "@babel/preset-env",
-                "babel-loader",
-                "concurrently",
-                "css-loader",
-                "mini-css-extract-plugin",
-                "postcss-loader",
-                "postcss-preset-env",
-                "sass-loader",
-                "webpack",
-                "webpack-bundle-tracker",
-                "webpack-cli",
-                "webpack-dev-server",
-                "webpack-merge",
-            ],
-            remove_keys=["babel"],
-            scripts={
-                "dev": "gulp",
-                "build": "gulp build",
-            },
-        )
-        remove_webpack_files()
-    elif choice == "Webpack":
-        scripts = {
-            "dev": "webpack serve --config webpack/dev.config.js",
-            "build": "webpack --config webpack/prod.config.js",
-        }
-        remove_dev_deps = [
-            "browser-sync",
-            "cssnano",
-            "gulp",
-            "gulp-concat",
-            "gulp-imagemin",
-            "gulp-plumber",
-            "gulp-postcss",
-            "gulp-rename",
-            "gulp-sass",
-            "gulp-uglify-es",
-        ]
-        if not use_docker:
-            dev_django_cmd = (
-                "uvicorn config.asgi:application --reload" if use_async else "python manage.py runserver_plus"
-            )
-            scripts.update(
-                {
-                    "dev": "concurrently npm:dev:*",
-                    "dev:webpack": "webpack serve --config webpack/dev.config.js",
-                    "dev:django": dev_django_cmd,
-                },
-            )
-        else:
-            remove_dev_deps.append("concurrently")
-        update_package_json(remove_dev_deps=remove_dev_deps, scripts=scripts)
-        remove_gulp_files()
+    return None
 
 
 def remove_prettier_pre_commit():
@@ -475,21 +401,10 @@ def main():  # noqa: C901, PLR0912, PLR0915
         if "{{ cookiecutter.keep_local_envs_in_vcs }}".lower() == "y":
             append_to_gitignore_file("!.envs/.local/")
 
-    if "{{ cookiecutter.frontend_pipeline }}" in ["None"]:
-        remove_gulp_files()
-        remove_webpack_files()
-        remove_sass_files()
-        remove_packagejson_file()
-        remove_prettier_pre_commit()
-        if "{{ cookiecutter.use_docker }}".lower() == "y":
-            remove_node_dockerfile()
-    else:
-        remove_project_css()
-        handle_js_runner(
-            "{{ cookiecutter.frontend_pipeline }}",
-            use_docker=("{{ cookiecutter.use_docker }}".lower() == "y"),
-            use_async=("{{ cookiecutter.use_async }}".lower() == "y"),
-        )
+    remove_sass_files()
+    remove_prettier_pre_commit()
+    if "{{ cookiecutter.use_docker }}".lower() == "y":
+        remove_node_dockerfile()
 
     if "{{ cookiecutter.cloud_provider }}" != "MinIO":
         remove_minio_setup_files()

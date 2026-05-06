@@ -21,7 +21,6 @@
   "cloud_provider": "MinIO",
   "rest_api": ["None", "DRF", "Django Ninja"],
   "use_async": "n",
-  "frontend_pipeline": ["None", "Gulp", "Webpack"],
   "use_celery": "n",
   "use_sentry": "n",
   "use_heroku": "n",

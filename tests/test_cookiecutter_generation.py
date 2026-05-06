@@ -66,9 +66,7 @@ SUPPORTED_COMBINATIONS = [
     {"rest_api": "Django Ninja"},
     {"use_async": "y"},
     {"use_async": "n"},
-    {"frontend_pipeline": "None"},
-    {"frontend_pipeline": "Gulp"},
-    {"frontend_pipeline": "Webpack"},
+    
     {"use_celery": "y"},
     {"use_celery": "n"},
     {"use_sentry": "y"},

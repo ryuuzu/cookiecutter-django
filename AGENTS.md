@@ -50,7 +50,7 @@ sh tests/test_docker.sh use_celery=y use_drf=y   # with options
 
 # Bare metal (needs PostgreSQL and Redis running)
 sh tests/test_bare.sh
-sh tests/test_bare.sh use_celery=y frontend_pipeline=Gulp
+sh tests/test_bare.sh use_celery=y
 ```
 
 ### Generate a project locally for debugging

@@ -103,9 +103,6 @@ THIRD_PARTY_APPS = [
 {%- elif cookiecutter.rest_api == 'Django Ninja' %}
     "corsheaders",
 {%- endif %}
-{%- if cookiecutter.frontend_pipeline == 'Webpack' %}
-    "webpack_loader",
-{%- endif %}
     "django_filters",
     "auditlog",
 ]
@@ -422,20 +419,6 @@ SPECTACULAR_SETTINGS = {
     "SCHEMA_PATH_PREFIX": "/api/",
 }
 {%- endif %}
-{%- if cookiecutter.frontend_pipeline == 'Webpack' %}
-# django-webpack-loader
-# ------------------------------------------------------------------------------
-WEBPACK_LOADER = {
-    "DEFAULT": {
-        "CACHE": not DEBUG,
-        "STATS_FILE": BASE_DIR / "webpack-stats.json",
-        "POLL_INTERVAL": 0.1,
-        "IGNORE": [r".+\.hot-update.js", r".+\.map"],
-    },
-}
-
-{%- endif %}
-
 {% if cookiecutter.rest_api == 'DRF' -%}
 # Simple JWT Settings
 # ------------------------------------------------------------------------------

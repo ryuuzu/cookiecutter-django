@@ -76,15 +76,6 @@ rest_api:
 use_async:
     Indicates whether the project should use web sockets with Uvicorn + Gunicorn.
 
-frontend_pipeline:
-    Select a pipeline to compile and optimise frontend assets (JS, CSS, ...):
-
-    1. None
-    2. `Gulp`_
-    3. `Webpack`_
-
-Both Gulp and Webpack support Bootstrap recompilation with real-time variables alteration.
-
 use_celery:
     Indicates whether the project should be configured to use Celery_.
 

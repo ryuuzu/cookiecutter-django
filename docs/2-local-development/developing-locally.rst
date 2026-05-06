@@ -182,32 +182,8 @@ You can also use Django admin to queue up tasks, thanks to the `django-celerybea
 .. _django-celerybeat: https://django-celery-beat.readthedocs.io/en/latest/
 
 
-.. _bare-metal-webpack-gulp:
-
-Using Webpack or Gulp
----------------------
-
-If you've opted for Gulp or Webpack as front-end pipeline, the project comes configured with `Sass`_ compilation and `live reloading`_. As you change your Sass/JS source files, the task runner will automatically rebuild the corresponding CSS and JS assets and reload them in your browser without refreshing the page.
-
-#. Make sure that `Node.js`_ v18 is installed on your machine.
-#. In the project root, install the JS dependencies with::
-
-    npm install
-
-#. Now - with your virtualenv activated - start the application by running::
-
-    npm run dev
-
-   This will start 2 processes in parallel: the static assets build loop on one side, and the Django server on the other.
-
-#. Access your application at the address of the ``node`` service in order to see your correct styles. This is http://localhost:3000 by default.
-
-   .. note:: Do NOT access the application using the Django port (8000 by default), as it will result in broken styles and 404s when accessing static assets.
-
-
-.. _Node.js: http://nodejs.org/download/
-.. _Sass: https://sass-lang.com/
-.. _live reloading: https://browsersync.io
+.. note:: This template does not include a front-end build pipeline (Gulp/Webpack). If you need to build or serve static
+    frontend assets, manage Node/NPM and the build process yourself outside of the generated project.
 
 Summary
 -------
