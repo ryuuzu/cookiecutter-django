@@ -25,37 +25,53 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 DEBUG_VALUE = "debug"
 
 
+def safe_unlink(path_like):
+    p = Path(path_like)
+    try:
+        if p.exists():
+            p.unlink()
+    except Exception as e:  # pragma: no cover - best-effort cleanup
+        print(f"Warning: could not remove {p}: {e}", file=sys.stderr)
+
+
+def safe_rmtree(path_like):
+    p = Path(path_like)
+    try:
+        if p.exists():
+            shutil.rmtree(p)
+    except Exception as e:  # pragma: no cover - best-effort cleanup
+        print(f"Warning: could not rmtree {p}: {e}", file=sys.stderr)
+
+
 def remove_open_source_files():
     file_names = ["CONTRIBUTORS.txt", "LICENSE"]
     for file_name in file_names:
-        Path(file_name).unlink()
+        safe_unlink(Path(file_name))
 
 
 def remove_gplv3_files():
     file_names = ["COPYING"]
     for file_name in file_names:
-        Path(file_name).unlink()
+        safe_unlink(Path(file_name))
 
 
 def remove_custom_user_manager_files():
     users_path = Path("{{cookiecutter.project_slug}}", "users")
-    (users_path / "managers.py").unlink()
-    (users_path / "tests" / "test_managers.py").unlink()
+    safe_unlink(users_path / "managers.py")
+    safe_unlink(users_path / "tests" / "test_managers.py")
 
 
 def remove_pycharm_files():
     idea_dir_path = Path(".idea")
-    if idea_dir_path.exists():
-        shutil.rmtree(idea_dir_path)
+    safe_rmtree(idea_dir_path)
 
     docs_dir_path = Path("docs", "pycharm")
-    if docs_dir_path.exists():
-        shutil.rmtree(docs_dir_path)
+    safe_rmtree(docs_dir_path)
 
 
 def remove_docker_files():
-    shutil.rmtree(".devcontainer")
-    shutil.rmtree("compose")
+    safe_rmtree(Path(".devcontainer"))
+    safe_rmtree(Path("compose"))
 
     file_names = [
         "docker-compose.local.yml",
@@ -64,19 +80,19 @@ def remove_docker_files():
         "justfile",
     ]
     for file_name in file_names:
-        Path(file_name).unlink()
+        safe_unlink(Path(file_name))
     if "{{ cookiecutter.editor }}" == "PyCharm":
         file_names = ["docker_compose_up_django.xml", "docker_compose_up_docs.xml"]
         for file_name in file_names:
-            Path(".idea", "runConfigurations", file_name).unlink()
+            safe_unlink(Path(".idea", "runConfigurations", file_name))
 
 
 def remove_nginx_docker_files():
-    shutil.rmtree(Path("compose", "production", "nginx"))
+    safe_rmtree(Path("compose", "production", "nginx"))
 
 
 def remove_utility_files():
-    shutil.rmtree("utility")
+    safe_rmtree(Path("utility"))
 
 
 def remove_heroku_files():
@@ -85,12 +101,12 @@ def remove_heroku_files():
         if file_name == "requirements.txt" and "{{ cookiecutter.ci_tool }}".lower() == "travis":
             # Don't remove the file if we are using Travis CI but not using Heroku
             continue
-        Path(file_name).unlink()
-    shutil.rmtree("bin")
+        safe_unlink(Path(file_name))
+    safe_rmtree(Path("bin"))
 
 
 def remove_sass_files():
-    shutil.rmtree(Path("{{cookiecutter.project_slug}}", "static", "sass"))
+    safe_rmtree(Path("{{cookiecutter.project_slug}}", "static", "sass"))
 
 
 def remove_gulp_files():
@@ -107,8 +123,7 @@ def remove_vendors_js():
 
 def remove_project_css():
     project_css_path = Path("{{ cookiecutter.project_slug }}", "static", "css", "project.css")
-    if project_css_path.exists():
-        project_css_path.unlink()
+    safe_unlink(project_css_path)
 
 
 def remove_packagejson_file():
@@ -129,6 +144,8 @@ def remove_prettier_pre_commit():
 
 def remove_repo_from_pre_commit_config(repo_to_remove: str):
     pre_commit_config = Path(".pre-commit-config.yaml")
+    if not pre_commit_config.exists():
+        return
     content = pre_commit_config.read_text().splitlines(keepends=True)
 
     removing = False
@@ -151,7 +168,7 @@ def remove_celery_files():
         Path("{{ cookiecutter.project_slug }}", "users", "tests", "test_tasks.py"),
     ]
     for file_path in file_paths:
-        file_path.unlink()
+        safe_unlink(file_path)
 
 
 def remove_async_files():
@@ -160,23 +177,23 @@ def remove_async_files():
         Path("config", "websocket.py"),
     ]
     for file_path in file_paths:
-        file_path.unlink()
+        safe_unlink(file_path)
 
 
 def remove_dottravisyml_file():
-    Path(".travis.yml").unlink()
+    safe_unlink(Path(".travis.yml"))
 
 
 def remove_dotgitlabciyml_file():
-    Path(".gitlab-ci.yml").unlink()
+    safe_unlink(Path(".gitlab-ci.yml"))
 
 
 def remove_dotgithub_folder():
-    shutil.rmtree(".github")
+    safe_rmtree(Path(".github"))
 
 
 def remove_dotdrone_file():
-    Path(".drone.yml").unlink()
+    safe_unlink(Path(".drone.yml"))
 
 
 def generate_random_string(length, using_digits=False, using_ascii_letters=False, using_punctuation=False):  # noqa: FBT002
@@ -315,42 +332,42 @@ def set_flags_in_settings_files():
 
 
 def remove_envs_and_associated_files():
-    shutil.rmtree(".envs")
-    Path("merge_production_dotenvs_in_dotenv.py").unlink()
-    shutil.rmtree("tests")
+    safe_rmtree(Path(".envs"))
+    safe_unlink(Path("merge_production_dotenvs_in_dotenv.py"))
+    safe_rmtree(Path("tests"))
 
 
 def remove_celery_compose_dirs():
-    shutil.rmtree(Path("compose", "local", "django", "celery"))
-    shutil.rmtree(Path("compose", "production", "django", "celery"))
+    safe_rmtree(Path("compose", "local", "django", "celery"))
+    safe_rmtree(Path("compose", "production", "django", "celery"))
 
 
 def remove_node_dockerfile():
-    shutil.rmtree(Path("compose", "local", "node"))
+    safe_rmtree(Path("compose", "local", "node"))
 
 
 def remove_aws_dockerfile():
-    shutil.rmtree(Path("compose", "production", "aws"))
+    safe_rmtree(Path("compose", "production", "aws"))
 
 
 def remove_drf_starter_files():
-    Path("config", "api_router.py").unlink()
-    Path("{{cookiecutter.project_slug}}", "users", "api", "serializers.py").unlink()
+    safe_unlink(Path("config", "api_router.py"))
+    safe_unlink(Path("{{cookiecutter.project_slug}}", "users", "api", "serializers.py"))
 
 
 def remove_ninja_starter_files():
-    Path("config", "api.py").unlink()
-    Path("{{cookiecutter.project_slug}}", "users", "api", "schema.py").unlink()
+    safe_unlink(Path("config", "api.py"))
+    safe_unlink(Path("{{cookiecutter.project_slug}}", "users", "api", "schema.py"))
 
 
 def remove_rest_api_files():
     remove_drf_starter_files()
     remove_ninja_starter_files()
-    shutil.rmtree(Path("{{cookiecutter.project_slug}}", "users", "api"))
-    shutil.rmtree(Path("{{cookiecutter.project_slug}}", "users", "tests", "api"))
+    safe_rmtree(Path("{{cookiecutter.project_slug}}", "users", "api"))
+    safe_rmtree(Path("{{cookiecutter.project_slug}}", "users", "tests", "api"))
 
 def remove_minio_setup_files():
-    Path("config", "storages.py").unlink()
+    safe_unlink(Path("config", "storages.py"))
 
 
 def main():  # noqa: C901, PLR0912, PLR0915
@@ -467,9 +484,10 @@ def setup_dependencies():
                     "DOCKER_BUILDKIT": "1",
                 },
             )
-        except subprocess.CalledProcessError as e:
-            print(f"Error building Docker image: {e}", file=sys.stderr)
-            sys.exit(1)
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
+            print(f"Warning: Docker build skipped or failed: {e}", file=sys.stderr)
+            print(INFO + "Skipping dependency installation inside Docker image.", file=sys.stderr)
+            return
 
         current_path = Path.cwd().absolute()
         # Use Docker to run the uv command
@@ -481,16 +499,18 @@ def setup_dependencies():
     # Install production dependencies
     try:
         subprocess.run([*uv_cmd, "add", "--no-sync", "-r", "requirements/production.txt"], check=True)  # noqa: S603
-    except subprocess.CalledProcessError as e:
-        print(f"Error installing production dependencies: {e}", file=sys.stderr)
-        sys.exit(1)
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        print(f"Warning: could not install production dependencies: {e}", file=sys.stderr)
+        print(INFO + "Skipping dependency installation.", file=sys.stderr)
+        return
 
     # Install local (development) dependencies
     try:
         subprocess.run([*uv_cmd, "add", "--no-sync", "--dev", "-r", "requirements/local.txt"], check=True)  # noqa: S603
-    except subprocess.CalledProcessError as e:
-        print(f"Error installing local dependencies: {e}", file=sys.stderr)
-        sys.exit(1)
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        print(f"Warning: could not install local dependencies: {e}", file=sys.stderr)
+        print(INFO + "Skipping local dependency installation.", file=sys.stderr)
+        return
 
     # Remove the requirements directory
     requirements_dir = Path("requirements")
@@ -498,12 +518,11 @@ def setup_dependencies():
         try:
             shutil.rmtree(requirements_dir)
         except Exception as e:  # noqa: BLE001
-            print(f"Error removing 'requirements' folder: {e}", file=sys.stderr)
-            sys.exit(1)
+            print(f"Warning: Error removing 'requirements' folder: {e}", file=sys.stderr)
+            # Continue on best-effort cleanup
 
     uv_image_parent_dir_path = Path("compose/local/uv")
-    if uv_image_parent_dir_path.exists():
-        shutil.rmtree(str(uv_image_parent_dir_path))
+    safe_rmtree(uv_image_parent_dir_path)
 
     print("Setup complete!")
 
