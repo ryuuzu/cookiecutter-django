@@ -28,11 +28,6 @@ urlpatterns = [
         TemplateView.as_view(template_name="pages/home.html"),
 {%- endif %}
          name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
     # Django Admin, use {% raw %}{% url 'admin:index' %}{% endraw %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

@@ -25,6 +25,7 @@
   "use_sentry": "n",
   "use_heroku": "n",
   "ci_tool": ["None", "Travis", "Gitlab", "Github", "Drone"],
+  "postgresql_version": "15",
   "keep_local_envs_in_vcs": "y",
   "debug": "n"
 }
