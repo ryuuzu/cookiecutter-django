@@ -14,17 +14,17 @@ from {{ cookiecutter.project_slug }}.base.exceptions import BaseException
 def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
-    if isinstance(exception, BaseException):
+    if isinstance(exc, BaseException):
         return Response(
             ResponseSerializer(
                 {
                     "status": "error",
-                    "code": exception.code,
-                    "title": exception.title,
-                    "detail": exception.detail,
+                    "code": exc.code,
+                    "title": exc.title,
+                    "detail": exc.detail,
                 }
             ).data,
-            status=exception.status_code,
+            status=exc.status_code,
         )
     if isinstance(exc, Throttled):
         default_detail = "Too many attempts."
