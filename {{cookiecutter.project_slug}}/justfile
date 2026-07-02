@@ -2,6 +2,7 @@ set shell := ["bash", "-uc"]
 
 image_name := "{{ cookiecutter.project_slug }}_local_django"
 
+{% raw %}
 compose_local := "docker compose -f docker-compose.local.yml"
 compose_build := "docker compose -f docker-compose.local.build.yml"
 
@@ -114,3 +115,4 @@ wipe-out:
     else
         echo "Aborted."
     fi
+{% endraw %}
