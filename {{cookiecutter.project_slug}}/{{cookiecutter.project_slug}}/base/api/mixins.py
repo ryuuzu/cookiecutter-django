@@ -60,7 +60,8 @@ class BaseModelViewSetMixin(Generic[_ModelT]):
 
         return context
 
-g        if self.request.user.is_superuser and self.allow_view_deleted:
+    def get_queryset(self):
+        if self.request.user.is_superuser and self.allow_view_deleted:
             try:
                 queryset = self.model.objects.all_objects()
             except AttributeError:
