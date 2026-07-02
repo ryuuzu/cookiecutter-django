@@ -1,38 +1,116 @@
-export COMPOSE_FILE := "docker-compose.local.yml"
+set shell := ["bash", "-uc"]
 
-## Just does not yet manage signals for subprocesses reliably, which can lead to unexpected behavior.
-## Exercise caution before expanding its usage in production environments.
-## For more information, see https://github.com/casey/just/issues/2473 .
+image_name := "{{ cookiecutter.project_slug }}_local_django"
 
+compose_local := "docker compose -f docker-compose.local.yml"
+compose_build := "docker compose -f docker-compose.local.build.yml"
 
-# Default command to list all available commands.
+# Default recipe -> list available commands
 default:
     @just --list
 
-# build: Build python image.
-build *args:
-    @echo "Building python image..."
-    @docker compose build {{ "{{args}}" }}
+# -------------------------
+# Smart runner (private helper)
+# exec into running container if present, else run --rm
+# -------------------------
+_run_smart CMD:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    RUNNING_DJANGO=$({{compose_local}} ps -q django)
+    if [ -n "$RUNNING_DJANGO" ]; then
+        echo "Using running django container"
+        docker exec -it "$RUNNING_DJANGO" {{CMD}}
+    else
+        echo "No running container found. Using run --rm"
+        {{compose_local}} run --rm django {{CMD}}
+    fi
 
-# up: Start up containers.
-up:
-    @echo "Starting up containers..."
-    @docker compose up -d --remove-orphans
+# -------------------------
+# Dev helpers
+# -------------------------
 
-# down: Stop containers.
-down:
-    @echo "Stopping containers..."
-    @docker compose down
+lint:
+    just _run_smart "ruff check --fix"
 
-# prune: Remove containers and their volumes.
-prune *args:
-    @echo "Killing containers and removing volumes..."
-    @docker compose down -v {{ "{{args}}" }}
+format:
+    just _run_smart "ruff format"
 
-# logs: View container logs
-logs *args:
-    @docker compose logs -f {{ "{{args}}" }}
+pytest:
+    just _run_smart "pytest tests/"
 
-# manage: Executes `manage.py` command.
-manage +args:
-    @docker compose run --rm django python ./manage.py {{ "{{args}}" }}
+pytest-coverage:
+    just _run_smart "pytest --cov=core_apps --cov-report=html tests/"
+
+bash:
+    just _run_smart "bash"
+
+shell:
+    just _run_smart "python manage.py shell"
+
+migrations:
+    just _run_smart "python manage.py makemigrations"
+
+migrate:
+    just _run_smart "python manage.py migrate"
+
+cs:
+    just _run_smart "python manage.py collectstatic --noinput --clear"
+
+createsuperuser:
+    just _run_smart "python manage.py createsuperuser"
+
+# usage: just add requests
+add *ARGS:
+    just _run_smart "uv add {{ARGS}}"
+
+# -------------------------
+# Dev server
+# -------------------------
+
+dev-server:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -z "$(docker images -q {{image_name}})" ]; then
+        echo "Image missing. Building..."
+        {{compose_build}} build
+    fi
+    {{compose_local}} up -d --remove-orphans
+    {{compose_local}} logs django --follow
+
+dev-server-build:
+    {{compose_build}} build
+    {{compose_local}} up -d --remove-orphans
+    {{compose_local}} logs django --follow
+
+dev-server-build-only:
+    {{compose_build}} build
+
+remove-dev-server:
+    {{compose_local}} down
+
+docker-up:
+    {{compose_local}} up django
+
+logs:
+    {{compose_local}} logs django --follow
+
+# -------------------------
+# Management
+# -------------------------
+
+# usage: just manage createsuperuser
+manage *ARGS:
+    just _run_smart "python manage.py {{ARGS}}"
+
+# -------------------------
+# Dangerous stuff ☠️
+# -------------------------
+
+wipe-out:
+    #!/usr/bin/env bash
+    read -p "Type 'yes' to confirm: " ans
+    if [ "$ans" = "yes" ]; then
+        {{compose_local}} down -v --remove-orphans
+    else
+        echo "Aborted."
+    fi

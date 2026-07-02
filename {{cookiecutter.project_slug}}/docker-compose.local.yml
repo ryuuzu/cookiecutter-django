@@ -1,5 +1,7 @@
+{%- if cookiecutter.use_celery == 'y' %}
 volumes:
-  {% if cookiecutter.use_celery == 'y' %}{{ cookiecutter.project_slug }}_local_redis_data: {}{% endif %}
+  {{ cookiecutter.project_slug }}_local_redis_data: {}
+{%- endif %}
 
 services:
   django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
@@ -32,9 +34,10 @@ services:
     volumes:
       - {{ cookiecutter.project_slug }}_local_redis_data:/data
 
-  celeryworker:
+  celeryworker: &nobuild
     <<: *django
-    image: {{ cookiecutter.project_slug }}_local_celeryworker
+    build: !reset null      # ← remove inherited build block
+    image: {{ cookiecutter.project_slug }}_local_django
     container_name: {{ cookiecutter.project_slug }}_local_celeryworker
     depends_on:
       - redis
@@ -42,8 +45,8 @@ services:
     command: /start-celeryworker
 
   celerybeat:
-    <<: *django
-    image: {{ cookiecutter.project_slug }}_local_celerybeat
+    <<: *nobuild
+    image: {{ cookiecutter.project_slug }}_local_django
     container_name: {{ cookiecutter.project_slug }}_local_celerybeat
     depends_on:
       - redis
@@ -51,11 +54,10 @@ services:
     command: /start-celerybeat
 
   flower:
-    <<: *django
-    image: {{ cookiecutter.project_slug }}_local_flower
+    <<: *nobuild
+    image: {{ cookiecutter.project_slug }}_local_django
     container_name: {{ cookiecutter.project_slug }}_local_flower
     ports:
       - '5555:5555'
     command: /start-flower
-
   {%- endif %}
